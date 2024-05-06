@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:sharara_apps_building_helpers/src/Functions/helper.dart';
 
+
 class ShararaHttp {
+
+  static Future<Response?> Function(Response)? onResponse;
+
   static Future<Response?> get({required final String url,
     final Map<String,String>? headers,
     final Options? options,
@@ -23,6 +27,9 @@ class ShararaHttp {
     ),
       onError:onError
     );
+    if(response!=null && onResponse!=null){
+      return onResponse!(response);
+    }
     return response;
   }
 
@@ -48,6 +55,9 @@ class ShararaHttp {
     ),
         onError:onError
     );
+    if(response!=null && onResponse!=null){
+      return onResponse!(response);
+    }
     return response;
   }
 }

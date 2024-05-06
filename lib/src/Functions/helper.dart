@@ -2,7 +2,6 @@
 
 import 'dart:io';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
