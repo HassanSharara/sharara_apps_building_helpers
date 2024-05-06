@@ -3,12 +3,10 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 import 'package:sharara_apps_building_helpers/src/Ui/ShararaAppHelper/context_and_main_scaffold_initializer.dart';
-import 'package:sharara_apps_building_helpers/src/Ui/exporter.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class FunctionHelpers {
@@ -105,6 +103,17 @@ static Future<T?> tryFutureCallBack<T>(Future<T?> Function() callback,
     }
   }
   return double.tryParse(d.toString())!=null;
+}
+
+static T? tryCatch<T>(Function() callback, {final Function(dynamic)? onError}){
+  try{
+    return callback();
+  }catch(e){
+    if(onError!=null){
+      onError(e);
+    }
+  }
+  return null;
 }
   static bool isEmail(final String email,{final String message="يجب ان يكون البريد الالكتروني صالح"}){
     final check= RegExp(
