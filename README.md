@@ -14,6 +14,9 @@ There are also algorithms ready to communicate on the Internet, verify informati
 - Custom animations.
 
 
+# Rules 
+ - if you want to use this app helper you need to call `FunctionHelpers.jumpTo(parsed context);` to Navigate new Screen
+ - if you were using Sharara Context or you create Sharara Dialog using dialog controller `ShararaDialogController` then you could use `ShararaDialogController.cancelCurrentDialog();` to pop of the current using context
 ### Installation
 
 Add the following dependencies in your pubspec.yaml file of your flutter project.
