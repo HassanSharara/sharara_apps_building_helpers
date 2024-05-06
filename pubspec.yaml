@@ -2,7 +2,7 @@ name: sharara_apps_building_helpers
 description: "A new sharara package to make developing more easy and efficient."
 homepage: https://github.com/HassanSharara
 repository: https://github.com/HassanSharara/sharara_apps_building_helpers/tree/master
-version: 1.0.1
+version: 1.0.2
 
 environment:
   sdk: '>=3.3.4 <4.0.0'
@@ -58,3 +58,8 @@ flutter:
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
 license: MIT
+
+platforms:
+  android:
+  ios:
+  web:
