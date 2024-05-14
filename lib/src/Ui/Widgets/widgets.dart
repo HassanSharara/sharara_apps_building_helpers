@@ -136,6 +136,9 @@ class RoyalRoundedButton extends StatelessWidget {
         this.opacity,
         this.textStyle,
         this.borderRadius,
+        this.boxShadowColorOpacity = 0.3,
+        this.boxShadowBlurRadius = 9.0,
+        this.boxShadowSpreadRadius = 4.0,
         this.padding = const EdgeInsets.symmetric(horizontal:16,vertical:10),
         this.child});
   final String? title;
@@ -143,11 +146,13 @@ class RoyalRoundedButton extends StatelessWidget {
   final GestureTapCallback? onPressed;
   final Color? color;
   final TextStyle? textStyle;
+  final double boxShadowSpreadRadius,boxShadowBlurRadius,boxShadowColorOpacity;
   final double? opacity;
   final BorderRadius? borderRadius;
   final EdgeInsets padding;
   @override
   Widget build(BuildContext context) {
+    final Color color = this.color ?? RoyalColors.mainAppColor;
     return InkWell(
       onTap:onPressed,
       radius:15,
@@ -159,14 +164,18 @@ class RoyalRoundedButton extends StatelessWidget {
         decoration:BoxDecoration(
             borderRadius:borderRadius??BorderRadius.circular(15),
             gradient: LinearGradient(
-                colors: color!=null?
+                colors:
                 [
-                  color!,
-                  color!,
-                ]:[
-                  RoyalColors.mainAppColor.withOpacity(0.9),
-                  RoyalColors.mainAppColor.withOpacity(0.5),
-                ])
+                  color,
+                  color,
+                ]),
+            boxShadow:[
+              BoxShadow(
+                color:color.withOpacity(boxShadowColorOpacity),
+                spreadRadius:boxShadowSpreadRadius,
+                blurRadius:boxShadowBlurRadius
+              )
+            ]
         ),
         child:Center(
           child: child ??

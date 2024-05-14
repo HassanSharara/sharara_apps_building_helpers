@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   sharara_apps_building_helpers:
     path: ..
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:

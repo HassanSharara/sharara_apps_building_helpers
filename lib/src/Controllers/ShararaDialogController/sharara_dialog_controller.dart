@@ -19,6 +19,17 @@ class ShararaDialogController {
     if(!_unBThread.isCompleted)_unBThread.complete();
     _unBThread = newValue;
   }
+
+
+  Future<void> _forceEndingTheCurrentWorkLoad([final bool cacheThem = true])async{
+    await Future.delayed(const Duration(milliseconds:100));
+    if ( dialogsQueue.isNotEmpty && cacheThem) {
+      _queueHolder.addAll(dialogsQueue);
+    }
+    dialogsQueue.clear();
+    cancelCurrentDialog();
+    await Future.delayed(const Duration(milliseconds:100));
+  }
   showShararaDialog(final Widget child,{
     final bool canPop = true,
     final Future Function()? onPopInvoked,
@@ -27,39 +38,42 @@ class ShararaDialogController {
         child,
         canPop:canPop,
         onPopInvoked:(_)async{
+          activeDialogsCount--;
           if(onPopInvoked!=null){
             await onPopInvoked();
           }
           _refreshDialogInvoking();
-          activeDialogsCount--;
         })
     );
     if(dialogsQueue.length == 1)_showDialog();
   }
-  forceShowingDialog(final Widget child,{final bool canPop = true})async{
-    await Future.delayed(const Duration(milliseconds:100));
-    if ( dialogsQueue.isNotEmpty) {
-      _queueHolder.addAll(dialogsQueue);
-      dialogsQueue.clear();
-    }
-    cancelCurrentDialog();
-    await Future.delayed(const Duration(milliseconds:100));
+  forceShowingDialog(final Widget child,{final bool canPop = true,
+   final bool continueAfterCompletingThis = true,
+   final Future Function()? doThenCancelCallBack
+  })async{
+    await _forceEndingTheCurrentWorkLoad();
     showShararaDialog(
         child,
         canPop:canPop,
         onPopInvoked:()async{
-          if(_queueHolder.isNotEmpty){
+          if(continueAfterCompletingThis && _queueHolder.isNotEmpty){
             await Future.delayed(const Duration(milliseconds:100));
             if(_queueHolder.isNotEmpty){
               dialogsQueue.addAll(_queueHolder);
               _queueHolder.clear();
               await Future.delayed(const Duration(milliseconds:100));
             }
+          }else {
+            _queueHolder.clear();
           }
         }
     );
-
-
+    
+    if( doThenCancelCallBack!= null ){
+      await FunctionHelpers.tryFuture(doThenCancelCallBack());
+      await Future.delayed(const Duration(milliseconds:20));
+      await cancelCurrentDialog();
+    } 
   }
   doYouReallyWantToTakeThisAction(final DialogAskHolder holder){
     showShararaDialog(
@@ -76,14 +90,24 @@ class ShararaDialogController {
     ),canPop:true);
   }
 
-  Future<void> startLoading({final bool canPop = true})async=>forceShowingDialog(
+  Future<void> startLoading(
+  {
+    final Future Function()? onLoadingFutureCallback,
+    final bool canPop = true})async=>
+      forceShowingDialog(
     const ShararaLoadingDialog(
-        logo:Icon(Icons.check_circle,color:Colors.green,)
-    )
+        logo:Icon(
+          Icons.check_circle,
+          color:Colors.green,
+        )
+    ),
+        doThenCancelCallBack:onLoadingFutureCallback
   );
 
 
-  cancelCurrentDialog(){
+  void stopLoading()=>cancelCurrentDialog();
+  
+   cancelCurrentDialog(){
     if(activeDialogsCount<=0)return;
     final ScreenMaskController? lastController = MaskRootController.lastScreenController;
     if( lastController==null || !lastController.canUse )return;
@@ -92,6 +116,15 @@ class ShararaDialogController {
       unBlockThread.complete();
     }
   }
+
+   void jumpUsingDialog(final Widget child)async{
+     await _forceEndingTheCurrentWorkLoad();
+     final lastController = await getLastActiveScreenController;
+     if( lastController==null || !lastController.canUse )return;
+     await Future.delayed(const Duration(milliseconds:200));
+     FunctionHelpers.jumpTo(lastController.context!, child);
+   }
+
   _refreshDialogInvoking([final Future Function()? postFrameCallBack])async{
     if(dialogsQueue.isEmpty)return;
     dialogsQueue.removeFirst();
@@ -99,22 +132,45 @@ class ShararaDialogController {
     if(postFrameCallBack!=null) await postFrameCallBack();
     _showDialog();
   }
-  Widget _dialogWrapper(final Widget child,{final bool canPop = true,final PopInvokedCallback? onPopInvoked})=> PopScope(
-    canPop:canPop,
-    onPopInvoked:onPopInvoked ?? (_){
-       _refreshDialogInvoking();
-    },
+  Widget _dialogWrapper(final Widget child,{final bool canPop = true,final PopInvokedCallback? onPopInvoked})=>
+      popperWrapper(
     child:Material(
       color:RoyalColors.transparent,
       child:child,
-    ),
+    ),canPop:canPop,
+   onPopInvoked:onPopInvoked
   );
 
+   Widget popperWrapper (
+       {
+         required final Widget child,
+         final bool canPop = true,final PopInvokedCallback? onPopInvoked}){
+     return PopScope(
+         canPop:canPop,
+         onPopInvoked:onPopInvoked ?? (_){
+       _refreshDialogInvoking();
+     },child:child,);
+   }
+
+
+  Future<ScreenMaskController?>  get getLastActiveScreenController async{
+  await unBlockThread.future;
+  final ScreenMaskController? lastController = MaskRootController.lastScreenController;
+  if( lastController==null || !lastController.canUse )return null;
+  return lastController;
+}
+
+ Future<BuildContext?> get lastAvailableBuildContext async {
+   final ScreenMaskController? lastController = await getLastActiveScreenController;
+    if(lastController==null || !lastController.canUse) return null;
+    await Future.delayed(const Duration(milliseconds:250));
+    return lastController.context;
+  }
+
   void _showDialog()async{
-    if ( dialogsQueue.isEmpty || activeDialogsCount>=1 )return;
-    await unBlockThread.future;
-    final ScreenMaskController? lastController = MaskRootController.lastScreenController;
-    if( lastController==null || !lastController.canUse )return;
+    if ( dialogsQueue.isEmpty || activeDialogsCount>=1 )return null;
+    final ScreenMaskController? lastController = await getLastActiveScreenController;
+    if(lastController == null )return;
     final WidgetBuilder builder = dialogsQueue.first;
     activeDialogsCount++;
     showDialog(context:lastController.context!, builder: builder);

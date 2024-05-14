@@ -1,12 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 
 main()async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
   await ShararaAppHelperInitializer.initialize();
   runApp( ShararaAppHelper(builder:(BuildContext context)=>const FirstScreen()));
 }
-
 
 class FirstScreen extends StatelessWidget {
   const FirstScreen({super.key});
@@ -15,7 +18,6 @@ class FirstScreen extends StatelessWidget {
     return const Test();
   }
 }
-
 class Test extends StatelessWidget {
   const Test({super.key});
   @override
@@ -73,8 +75,18 @@ class Test extends StatelessWidget {
               RoyalRoundedButton(
                 key:UniqueKey(),
                 onPressed:()async{
-                  FunctionHelpers
-                      .jumpTo(context, const ShararaThemePicker());
+                 ShararaDialogController
+                 .instance
+                     .startLoading(
+                   onLoadingFutureCallback:()async{
+                     await Future.delayed(const Duration(seconds:3));
+                   }
+                 );
+                 await Future.delayed(const Duration(seconds:1));
+                 ShararaDialogController
+                 .instance.jumpUsingDialog(
+                   const ShararaThemePicker()
+                 );
                 },
                 title:"settings",
               ),

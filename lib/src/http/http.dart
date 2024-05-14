@@ -4,9 +4,9 @@ export 'package:dio/dio.dart' show Options,Response,CancelToken,ProgressCallback
 
 class ShararaHttp {
 
-  static Future<Response?> Function(Response)? onResponse;
+  static Future<Object?> Function(Response)? onResponse;
 
-  static Future<Response?> get({required final String url,
+  static Future<Object?> get({required final String url,
     final Map<String,String>? headers,
     final Options? options,
     Object? data,
@@ -34,7 +34,7 @@ class ShararaHttp {
   }
 
 
-  static Future<Response?> post({required final String url,
+  static Future<Object?> post({required final String url,
     final Map<String,String>? headers,
     final Options? options,
     Object? body,
@@ -45,9 +45,7 @@ class ShararaHttp {
   })async {
     final Dio dio = Dio();
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.post(url,
-      options: options ?? Options(
-          headers:headers,
-      ),
+      options: options ?? Options(headers:headers),
       queryParameters:queryParameters,
       cancelToken:cancelToken,
       data:body,
