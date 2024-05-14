@@ -4,9 +4,9 @@ export 'package:dio/dio.dart' show Options,Response,CancelToken,ProgressCallback
 
 class ShararaHttp {
 
-  static Future<Object?> Function(Response)? onResponse;
+  static Future<T?> Function<T>(Response)? onResponse;
 
-  static Future<Object?> get({required final String url,
+  static Future<T?> get<T>({required final String url,
     final Map<String,String>? headers,
     final Options? options,
     Object? data,
@@ -30,11 +30,11 @@ class ShararaHttp {
     if(response!=null && onResponse!=null){
       return onResponse!(response);
     }
-    return response;
+    return response as T;
   }
 
 
-  static Future<Object?> post({required final String url,
+  static Future<T?> post<T>({required final String url,
     final Map<String,String>? headers,
     final Options? options,
     Object? body,
@@ -56,6 +56,6 @@ class ShararaHttp {
     if(response!=null && onResponse!=null){
       return onResponse!(response);
     }
-    return response;
+    return response as T;
   }
 }
