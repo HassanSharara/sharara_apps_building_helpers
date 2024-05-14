@@ -27,7 +27,7 @@ class ShararaHttp {
     ),
       onError:onError
     );
-    if(response!=null && onResponse!=null){
+    if(response!=null && onResponse!=null && response is! T){
       return onResponse!(response);
     }
     return response as T;
@@ -53,7 +53,7 @@ class ShararaHttp {
     ),
         onError:onError
     );
-    if(response!=null && onResponse!=null){
+    if(response!=null && onResponse!=null && response is! T){
       return onResponse!(response);
     }
     return response as T;
