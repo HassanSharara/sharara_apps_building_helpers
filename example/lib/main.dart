@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
+import 'package:sharara_apps_building_helpers/ui.dart';
 
 main()async{
   WidgetsFlutterBinding.ensureInitialized();

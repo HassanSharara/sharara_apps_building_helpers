@@ -153,38 +153,43 @@ class RoyalRoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color color = this.color ?? RoyalColors.mainAppColor;
-    return InkWell(
-      onTap:onPressed,
-      radius:15,
-      splashColor:RoyalColors.white,
-      child: Container(
-        padding:padding,
-        margin:const EdgeInsets.symmetric(horizontal:4.0),
+    return Column(
+      mainAxisSize:MainAxisSize.min,
+      children: [
+        InkWell(
+          onTap:onPressed,
+          radius:15,
+          splashColor:RoyalColors.white,
+          child: Container(
+            padding:padding,
+            margin:const EdgeInsets.symmetric(horizontal:4.0),
 
-        decoration:BoxDecoration(
-            borderRadius:borderRadius??BorderRadius.circular(15),
-            gradient: LinearGradient(
-                colors:
-                [
-                  color,
-                  color,
-                ]),
-            boxShadow:[
-              BoxShadow(
-                color:color.withOpacity(boxShadowColorOpacity),
-                spreadRadius:boxShadowSpreadRadius,
-                blurRadius:boxShadowBlurRadius
-              )
-            ]
+            decoration:BoxDecoration(
+                borderRadius:borderRadius??BorderRadius.circular(15),
+                gradient: LinearGradient(
+                    colors:
+                    [
+                      color,
+                      color,
+                    ]),
+                boxShadow:[
+                  BoxShadow(
+                    color:color.withOpacity(boxShadowColorOpacity),
+                    spreadRadius:boxShadowSpreadRadius,
+                    blurRadius:boxShadowBlurRadius
+                  )
+                ]
+            ),
+            child:Center(
+              child: child ??
+                  Text(
+                    title!,
+                    style: textStyle ?? const TextStyle(color:RoyalColors.white),
+                  ),
+            ),
+          ),
         ),
-        child:Center(
-          child: child ??
-              Text(
-                title!,
-                style: textStyle ?? const TextStyle(color:RoyalColors.white),
-              ),
-        ),
-      ),
+      ],
     );
   }
 }

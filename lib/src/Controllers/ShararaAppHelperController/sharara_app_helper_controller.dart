@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
+import 'package:sharara_apps_building_helpers/ui.dart';
 
 class ShararaAppController {
   const ShararaAppController._();
