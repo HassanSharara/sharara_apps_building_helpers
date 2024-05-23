@@ -116,7 +116,7 @@ class _RoyalTextFormFieldState extends State<RoyalTextFormField> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.radius),
             borderSide:  BorderSide(
-              color: widget.borderColor?? RoyalColors.mainAppColor,
+              color: widget.borderColor?? RoyalColors.greyFaintColor,
               width: 0.5,
             ),
           ),
