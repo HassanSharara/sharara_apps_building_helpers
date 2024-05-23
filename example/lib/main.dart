@@ -62,8 +62,6 @@ class Test extends StatelessWidget {
                   ),
                 ),
               ),
-
-
               ElevatedButton(
                 onPressed:(){
                   FunctionHelpers.
@@ -91,7 +89,6 @@ class Test extends StatelessWidget {
                 },
                 title:"settings",
               ),
-
             ],
           )
       ),

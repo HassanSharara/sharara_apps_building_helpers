@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:sharara_apps_building_helpers/src/Cache/BoxCache/cache_settings.dart';
+import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 
 abstract class BasicCache {
   final CacheSettings settings;
@@ -22,15 +22,18 @@ abstract class BasicCache {
     if(data == null || data is! String) return null;
     final List<String> splitter = data.split(settings.secret);
     if(splitter.length<2)return null;
-    final List<int> bytes =  base64.decode(splitter.first);
-    return utf8.decode(bytes);
+    final List<int>? bytes =  FunctionHelpers.tryCatch<List<int>>(() => base64.decode(splitter.first));
+    if(bytes==null)return null;
+    return json.decode(utf8.decode(bytes));
   }
 
   String hashData(final dynamic data){
     if(settings.secret.isEmpty)return data;
-    final String baseHashedData = "${base64.encode(
-      utf8.encode(data.toString())
-    )}${settings.secret}$_randomEndValue";
+    final String baseHashedData = FunctionHelpers.tryCatch(() =>
+    "${base64.encode(
+        utf8.encode(json.encode(data))
+    )}${settings.secret}$_randomEndValue"
+    );
     return baseHashedData;
   }
 }

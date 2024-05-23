@@ -3,10 +3,23 @@ import 'package:sharara_apps_building_helpers/src/Functions/helper.dart';
 export 'package:dio/dio.dart' show Options,Response,CancelToken,ProgressCallback;
 
 class ShararaHttp {
+   static Map<String,dynamic> _defaultHeaders =  {};
+   static Map<String,dynamic>? Function(Map<String,dynamic>)? onGetHeadersInvoked;
+   static Map<String,dynamic> get defaultHeaders {
+     if(onGetHeadersInvoked!=null){
+       final Map<String,dynamic>? headers = onGetHeadersInvoked!(_defaultHeaders);
+       if(headers!=null)return headers;
+     }
+     return _defaultHeaders;
+   }
+   static set defaultHeaders(final Map<String,dynamic> value){
+     _defaultHeaders = value;
+   }
 
-  static Future<T?> Function<T>(Response)? onResponse;
+   Future<T?> Function<T>(Response)? onResponseReady;
 
-  static Future<T?> get<T>({required final String url,
+   ShararaHttp({this.onResponseReady});
+   Future<T?> get<T>({required final String url,
     final Map<String,String>? headers,
     final Options? options,
     Object? data,
@@ -14,11 +27,12 @@ class ShararaHttp {
     CancelToken? cancelToken,
     Map<String, dynamic>? queryParameters,
     final Function(dynamic)? onError,
+    final T? Function(Response)? resultBuilder,
   })async {
     final Dio dio = Dio();
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.get(url,
         options: options ?? Options(
-          headers:headers
+          headers:headers??defaultHeaders
         ),
         data:data,
         queryParameters:queryParameters,
@@ -27,14 +41,14 @@ class ShararaHttp {
     ),
       onError:onError
     );
-    if(response!=null && onResponse!=null && response is! T){
-      return onResponse!(response);
+    if(response!=null && onResponseReady!=null && response is! T){
+      return onResponseReady!(response);
     }
-    return response as T;
+    return response as T?;
   }
 
 
-  static Future<T?> post<T>({required final String url,
+   Future<T?> post<T>({required final String url,
     final Map<String,String>? headers,
     final Options? options,
     Object? body,
@@ -42,10 +56,11 @@ class ShararaHttp {
     CancelToken? cancelToken,
     Map<String, dynamic>? queryParameters,
     final Function(dynamic)? onError,
+    final T? Function(Response)? responseBuilder,
   })async {
     final Dio dio = Dio();
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.post(url,
-      options: options ?? Options(headers:headers),
+      options: options ?? Options(headers:headers??defaultHeaders),
       queryParameters:queryParameters,
       cancelToken:cancelToken,
       data:body,
@@ -53,9 +68,10 @@ class ShararaHttp {
     ),
         onError:onError
     );
-    if(response!=null && onResponse!=null && response is! T){
-      return onResponse!(response);
+    if(response!=null ){
+      if(responseBuilder!=null)responseBuilder(response);
+      if( onResponseReady!=null && response is! T) return onResponseReady!(response);
     }
-    return response as T;
+    return response as T?;
   }
 }
