@@ -9,6 +9,7 @@ class ShararaDirectionalityController {
     _init();
   }
   late final DirectionalityCacheManager cacheManager;
+  static TextDirection get currentDirection => instance.directionalityNotifier.value??instance.cachedDirectionality;
   static final ShararaDirectionalityController instance = ShararaDirectionalityController._();
   final ValueNotifier<TextDirection?> directionalityNotifier = ValueNotifier(null);
   static switchDirection(){
@@ -35,7 +36,7 @@ extension DirectionalityWorker on ShararaDirectionalityController {
     for(final TextDirection direction in TextDirection.values){
       if(direction.name==cachedDString)return direction;
     }
-    return TextDirection.ltr;
+    return TextDirection.rtl;
   }
   _setupListeners(){
     directionalityNotifier.addListener(_directionalityListener);
