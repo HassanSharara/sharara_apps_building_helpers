@@ -14,8 +14,8 @@ class RoyalTextFormField extends StatefulWidget {
         this.radius = 25,
         this.suffixIcon,
         this.maxLength,
-        this.borderColor = Colors.blueGrey,
-        this.focusColor = Colors.blue,
+        this.borderColor ,
+        this.focusColor ,
         this.maxLines = 1,
         this.isPassword = false,
         this.contextMenuBuilder,
@@ -28,8 +28,8 @@ class RoyalTextFormField extends StatefulWidget {
   final double? height, width;
   final double radius;
   final Widget? suffixIcon;
-  final Color borderColor;
-  final Color focusColor;
+  final Color? borderColor;
+  final Color? focusColor;
   final EditableTextContextMenuBuilder? contextMenuBuilder;
   @override
   State<RoyalTextFormField> createState() => _RoyalTextFormFieldState();
@@ -102,21 +102,21 @@ class _RoyalTextFormFieldState extends State<RoyalTextFormField> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.radius),
             borderSide:  BorderSide(
-              color: widget.borderColor,
+              color: widget.borderColor ?? RoyalColors.mainAppColor,
               width: 2.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.radius),
             borderSide:  BorderSide(
-              color: widget.focusColor,
+              color: widget.focusColor ?? RoyalColors.mainAppColor,
               width: 1,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(widget.radius),
             borderSide:  BorderSide(
-              color: widget.borderColor,
+              color: widget.borderColor?? RoyalColors.mainAppColor,
               width: 0.5,
             ),
           ),
