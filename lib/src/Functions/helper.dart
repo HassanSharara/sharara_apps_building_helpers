@@ -16,12 +16,14 @@ static Future<T?> tryFuture<T>(Future<T?> future,
     final int? timeoutSeconds,
     final bool withLoading  = false,
     final Function(dynamic er)? onError})async{
+    ShararaAppController.instance.shararaDialogController.startLoading();
     final T? result =  await future.then((value) => value)
         .timeout(Duration(seconds: timeoutSeconds ?? 90))
         .catchError((e){
       if(onError!=null)onError(e);
       return null;
     });
+    ShararaAppController.instance.shararaDialogController.cancelCurrentDialog();
     return result;
   }
 

@@ -168,6 +168,11 @@ class RoyalRoundedButton extends StatelessWidget {
                 borderRadius:borderRadius??BorderRadius.circular(15),
                 gradient: LinearGradient(
                     colors:
+                    onPressed==null?
+                    [
+                      color.withOpacity(0.35),
+                      color.withOpacity(0.35),
+                    ]:
                     [
                       color,
                       color,

@@ -24,7 +24,10 @@ abstract class BasicCache {
     if(splitter.length<2)return null;
     final List<int>? bytes =  FunctionHelpers.tryCatch<List<int>>(() => base64.decode(splitter.first));
     if(bytes==null)return null;
-    return json.decode(utf8.decode(bytes));
+    final bResult = FunctionHelpers.tryCatch(() => utf8.decode(bytes));
+    if(bResult==null)return null;
+    final jResult = FunctionHelpers.tryCatch(() => jsonDecode(bResult));
+    if(jResult==null)return bResult;
   }
 
   String hashData(final dynamic data){

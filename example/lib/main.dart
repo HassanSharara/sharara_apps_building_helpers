@@ -1,9 +1,9 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 import 'package:sharara_apps_building_helpers/ui.dart';
+
 
 main()async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,18 +74,6 @@ class Test extends StatelessWidget {
               RoyalRoundedButton(
                 key:UniqueKey(),
                 onPressed:()async{
-                 ShararaDialogController
-                 .instance
-                     .startLoading(
-                   onLoadingFutureCallback:()async{
-                     await Future.delayed(const Duration(seconds:3));
-                   }
-                 );
-                 await Future.delayed(const Duration(seconds:1));
-                 ShararaDialogController
-                 .instance.jumpUsingDialog(
-                   const ShararaThemePicker()
-                 );
                 },
                 title:"settings",
               ),
