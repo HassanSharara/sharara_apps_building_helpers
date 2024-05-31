@@ -28,6 +28,7 @@ class ShararaHttp {
     Map<String, dynamic>? queryParameters,
     final Function(dynamic)? onError,
     final T? Function(Response)? resultBuilder,
+    final bool withLoading = false,
   })async {
     final Dio dio = Dio();
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.get(url,
@@ -39,6 +40,7 @@ class ShararaHttp {
         cancelToken:cancelToken,
         onReceiveProgress:onReceiveProgress,
     ),
+      withLoading:withLoading,
       onError:onError
     );
     if(response!=null && onResponseReady!=null && response is! T){
@@ -57,6 +59,7 @@ class ShararaHttp {
     Map<String, dynamic>? queryParameters,
     final Function(dynamic)? onError,
     final T? Function(Response)? responseBuilder,
+    final bool withLoading = false,
   })async {
     final Dio dio = Dio();
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.post(url,
@@ -66,6 +69,7 @@ class ShararaHttp {
       data:body,
       onReceiveProgress:onReceiveProgress,
     ),
+        withLoading:withLoading,
         onError:onError
     );
     if(response!=null ){
