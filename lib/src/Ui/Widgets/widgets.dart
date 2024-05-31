@@ -134,6 +134,8 @@ class RoyalRoundedButton extends StatelessWidget {
         this.onPressed,
         this.color,
         this.opacity,
+        this.linearGradientColors,
+        this.gradient,
         this.textStyle,
         this.borderRadius,
         this.boxShadowColorOpacity = 0.3,
@@ -145,14 +147,38 @@ class RoyalRoundedButton extends StatelessWidget {
   final Widget? child;
   final GestureTapCallback? onPressed;
   final Color? color;
+  final List<Color>? linearGradientColors;
   final TextStyle? textStyle;
   final double boxShadowSpreadRadius,boxShadowBlurRadius,boxShadowColorOpacity;
   final double? opacity;
   final BorderRadius? borderRadius;
   final EdgeInsets padding;
+  final Gradient? gradient;
   @override
   Widget build(BuildContext context) {
     final Color color = this.color ?? RoyalColors.mainAppColor;
+
+    final Gradient defaultGradient = LinearGradient(
+        colors:
+        onPressed==null?
+        (
+            linearGradientColors!=null?
+            linearGradientColors!.map(
+                    (e)=>e.withOpacity(0.35)
+            ).toList():
+            [
+              color.withOpacity(0.35),
+              color.withOpacity(0.35),
+            ])
+
+            :
+        linearGradientColors!=null?
+        linearGradientColors!:
+        [
+          color,
+          color,
+        ]
+    );
     return Column(
       mainAxisSize:MainAxisSize.min,
       children: [
@@ -166,17 +192,10 @@ class RoyalRoundedButton extends StatelessWidget {
 
             decoration:BoxDecoration(
                 borderRadius:borderRadius??BorderRadius.circular(15),
-                gradient: LinearGradient(
-                    colors:
-                    onPressed==null?
-                    [
-                      color.withOpacity(0.35),
-                      color.withOpacity(0.35),
-                    ]:
-                    [
-                      color,
-                      color,
-                    ]),
+                gradient: onPressed!=null ?
+                gradient ??
+                defaultGradient:
+                defaultGradient,
                 boxShadow:[
                   BoxShadow(
                     color:color.withOpacity(boxShadowColorOpacity),
