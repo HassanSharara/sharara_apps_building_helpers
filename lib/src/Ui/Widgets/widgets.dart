@@ -176,7 +176,7 @@ class RoyalRoundedButton extends StatelessWidget {
         linearGradientColors!:
         [
           color,
-          color,
+          color.withOpacity(0.6),
         ]
     );
     return Column(
