@@ -63,7 +63,14 @@ class Test extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                onPressed:(){
+                onPressed:()async{
+
+                  ShararaDialogController.instance.startLoading(
+                  );
+                  await Future.delayed(const Duration(seconds: 4));
+                      ShararaDialogController.instance.cancelCurrentDialog(
+                  );
+                  return;
                   FunctionHelpers.
                   jumpTo(context, const ShararaThemePicker());
                   FunctionHelpers.toast("success",status:true);
@@ -74,6 +81,12 @@ class Test extends StatelessWidget {
               RoyalRoundedButton(
                 key:UniqueKey(),
                 onPressed:()async{
+                  for(final _ in List.generate(3,(e)=>e)){
+                   await ShararaDialogController.instance.startLoading();
+                   // await Future.delayed(const Duration(seconds:1));
+                   await ShararaDialogController.instance.cancelCurrentDialog();
+                 }
+
                 },
                 title:"settings",
               ),
