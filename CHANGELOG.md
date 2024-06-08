@@ -1,3 +1,3 @@
-## 0.0.1
+## 1.1.33
 
-* TODO: Describe initial release.
+- phone text editing controller adjusted

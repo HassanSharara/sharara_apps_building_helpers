@@ -78,9 +78,7 @@ class _WhatsAppAuthenticatorState extends State<WhatsAppAuthenticator> {
             controller: controller,
             inputType:widget.textInput,
           ),
-
           const SizedBox(height:10,),
-
           ValueListenableBuilder(
               valueListenable: counter,
               builder:(BuildContext context,final int counter,_){

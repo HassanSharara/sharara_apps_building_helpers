@@ -1,4 +1,4 @@
-package com.example.example
+package com.royalboardcompany.superman.superman
 
 import io.flutter.embedding.android.FlutterActivity
 

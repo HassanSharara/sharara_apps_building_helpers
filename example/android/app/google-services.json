@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "393727037756",
+    "project_id": "superman-c3edc",
+    "storage_bucket": "superman-c3edc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393727037756:android:404a48bc3ca3ebee1e8e39",
+        "android_client_info": {
+          "package_name": "com.royalboardcompany.superman.superman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393727037756-jfrmpkc0jhpfmj0e04nvudeag7ls6nn2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.royalboardcompany.superman.superman",
+            "certificate_hash": "e67c2f698751bbf47bf263c779ce0e7a6aff877b"
+          }
+        },
+        {
+          "client_id": "393727037756-hgda36j0lfg2a1l8mdrn7va9kv6t9n1d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQYgVYbbkzT3Io7XNw1AOauDZVWWpsoRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393727037756-hgda36j0lfg2a1l8mdrn7va9kv6t9n1d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

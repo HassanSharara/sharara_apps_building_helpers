@@ -11,3 +11,4 @@ export 'ShararaAppHelper/initializer.dart';
 export 'Widgets/widgets.dart';
 export 'ScreensHolders/swipe_screen_holder.dart';
 export 'WhatsAppAuthNum/whats_app_auth_number.dart';
+export 'Auth/exporter.dart';

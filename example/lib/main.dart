@@ -4,12 +4,18 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 import 'package:sharara_apps_building_helpers/ui.dart';
 
-
 main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await ShararaAppHelperInitializer.initialize();
-  runApp( ShararaAppHelper(builder:(BuildContext context)=>const FirstScreen()));
+
+
+  runApp(
+      ShararaAppHelper(
+      builder:(BuildContext context)=>const FirstScreen())
+  );
+
+
 }
 
 class FirstScreen extends StatelessWidget {
@@ -64,13 +70,6 @@ class Test extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed:()async{
-
-                  ShararaDialogController.instance.startLoading(
-                  );
-                  await Future.delayed(const Duration(seconds: 4));
-                      ShararaDialogController.instance.cancelCurrentDialog(
-                  );
-                  return;
                   FunctionHelpers.
                   jumpTo(context, const ShararaThemePicker());
                   FunctionHelpers.toast("success",status:true);
@@ -78,15 +77,17 @@ class Test extends StatelessWidget {
                 child:const Text("settings"),
               ),
               const SizedBox(height:20,),
+              RoyalPhoneTextFormField(title: "hi", controller: PhoneTextEditController()),
+              const SizedBox(height:20,),
               RoyalRoundedButton(
                 key:UniqueKey(),
                 onPressed:()async{
-                  for(final _ in List.generate(3,(e)=>e)){
-                   await ShararaDialogController.instance.startLoading();
-                   // await Future.delayed(const Duration(seconds:1));
-                   await ShararaDialogController.instance.cancelCurrentDialog();
-                 }
-
+                  FunctionHelpers.jumpTo(context, FbPhoneAuthScreen(
+                      phoneNumber: "+9647807832184",
+                      onVerificationSucceed: (_){
+                        FunctionHelpers.toast("yes",status:true);
+                      }
+                      ));
                 },
                 title:"settings",
               ),

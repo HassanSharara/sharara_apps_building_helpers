@@ -1,6 +1,58 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sharara_apps_building_helpers/src/Constants/Colors/colors.dart';
+
+class RoyalPhoneTextFormField extends RoyalTextFormField {
+   const RoyalPhoneTextFormField({super.key,
+    required super.title,
+    required super.controller,
+  }):assert(
+  controller is PhoneTextEditController
+  ),super(
+     inputType:TextInputType.phone
+   );
+}
+
+class PhoneTextEditController extends TextEditingController {
+  Country? country;
+  final List<String> countryFilter ;
+  PhoneTextEditController({this.countryFilter = const ["IQ"],super.text}):assert(countryFilter.isNotEmpty);
+
+  String get phoneCode => country?.phoneCode??"964";
+  @override
+  String get text => "+$phoneCode${super.text}".replaceAll("+${phoneCode}0","+$phoneCode");
+}
+
+class PhoneCodePicker extends StatefulWidget {
+  const PhoneCodePicker({super.key,required this.controller});
+  final PhoneTextEditController controller;
+  @override
+  State<PhoneCodePicker> createState() => _PhoneCodePickerState();
+}
+class _PhoneCodePickerState extends State<PhoneCodePicker> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap:(){
+        showCountryPicker(context: context,
+            countryFilter:widget.controller.countryFilter,
+            onSelect:(Country country){
+          setState(() {
+            widget.controller.country = country;
+          });
+        });
+      },
+      child: Row(
+        mainAxisSize:MainAxisSize.min,
+        children: [
+          Text("+${widget.controller.country?.phoneCode??"964"}"),
+          const Icon(Icons.arrow_drop_down)
+        ],
+      ),
+    );
+  }
+}
 
 
 class RoyalTextFormField extends StatefulWidget {
@@ -46,6 +98,22 @@ class _RoyalTextFormFieldState extends State<RoyalTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isPhoneController = widget.controller is PhoneTextEditController;
+    final Widget? suffix = isPhoneController ? PhoneCodePicker(controller: widget.controller as PhoneTextEditController):
+    (widget.isPassword == true
+        ? IconButton(
+      icon: const Icon(
+        Icons.remove_red_eye,
+        color:Colors.blueGrey,
+      ),
+      onPressed: () {
+        setState(() {
+          password = !password;
+        });
+      },
+    )
+        : null);
+
     return Container(
       height: widget.height,
       width: widget.width,
@@ -81,20 +149,7 @@ class _RoyalTextFormFieldState extends State<RoyalTextFormField> {
             color:Colors.blueGrey, fontWeight: FontWeight.w300),
         decoration: InputDecoration(
 
-          suffixIcon: widget.suffixIcon ??
-              (widget.isPassword == true
-                  ? IconButton(
-                icon: const Icon(
-                  Icons.remove_red_eye,
-                  color:Colors.blueGrey,
-                ),
-                onPressed: () {
-                  setState(() {
-                    password = !password;
-                  });
-                },
-              )
-                  : null),
+          suffixIcon: suffix,
           label: Text(
             '  ${widget.title}',
             style: const TextStyle(color:Colors.blueGrey),

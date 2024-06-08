@@ -38,6 +38,8 @@ dependencies:
   sharara_apps_building_helpers:
     path: ..
   hive_flutter: ^1.1.0
+  firebase_core: ^3.0.0
+  firebase_app_check: ^0.3.0
 
 dev_dependencies:
   flutter_test:
