@@ -20,8 +20,8 @@ class PhoneTextEditController extends TextEditingController {
   PhoneTextEditController({this.countryFilter = const ["IQ"],super.text}):assert(countryFilter.isNotEmpty);
 
   String get phoneCode => country?.phoneCode??"964";
-  @override
-  String get text => "+$phoneCode${super.text}".replaceAll("+${phoneCode}0","+$phoneCode");
+  String get nText => "+$phoneCode${super.text.replaceAll(phoneCode,"").replaceAll("+","")}".replaceAll("+${phoneCode}0","+$phoneCode");
+
 }
 
 class PhoneCodePicker extends StatefulWidget {
