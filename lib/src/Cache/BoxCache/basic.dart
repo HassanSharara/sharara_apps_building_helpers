@@ -28,6 +28,7 @@ abstract class BasicCache {
     if(bResult==null)return null;
     final jResult = FunctionHelpers.tryCatch(() => jsonDecode(bResult));
     if(jResult==null)return bResult;
+    return jResult;
   }
 
   String hashData(final dynamic data){

@@ -50,6 +50,8 @@ class Test extends StatelessWidget {
           child:Column(
             mainAxisAlignment:MainAxisAlignment.center,
             children: [
+
+
                Card(
                 child:Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -68,6 +70,8 @@ class Test extends StatelessWidget {
                   ),
                 ),
               ),
+
+
               ElevatedButton(
                 onPressed:()async{
                   FunctionHelpers.
@@ -76,21 +80,15 @@ class Test extends StatelessWidget {
                 },
                 child:const Text("settings"),
               ),
+
+
               const SizedBox(height:20,),
+
               RoyalPhoneTextFormField(title: "hi", controller: PhoneTextEditController()),
+
               const SizedBox(height:20,),
-              RoyalRoundedButton(
-                key:UniqueKey(),
-                onPressed:()async{
-                  FunctionHelpers.jumpTo(context, FbPhoneAuthScreen(
-                      phoneNumber: "+9647807832184",
-                      onVerificationSucceed: (_){
-                        FunctionHelpers.toast("yes",status:true);
-                      }
-                      ));
-                },
-                title:"settings",
-              ),
+
+
             ],
           )
       ),
