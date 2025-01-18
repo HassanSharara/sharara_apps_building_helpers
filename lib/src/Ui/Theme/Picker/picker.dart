@@ -85,10 +85,16 @@ class ShararaThemePicker extends StatelessWidget {
                    primary:false,
                    childAspectRatio:1,
                    children: [
-                    ...ShararaThemeController
+                    ...(ShararaThemeController
                      .instance
                      .themes
                      .entries
+                      .toList()
+                        ..sort((a,b){
+                          if(b.value.themeId.contains("default")) return 1;
+                          return 0;
+                        })
+                    )
                      .map((e) {
                        final ShararaTheme theme = e.value;
                        return InkWell(
@@ -123,6 +129,8 @@ class ShararaThemePicker extends StatelessWidget {
                        );
                     }
                        )
+                     .toList()
+
                    ],
                   ),
 

@@ -26,6 +26,19 @@ class ShararaAppController {
     bool get mounted => scaffoldKey.currentState?.mounted == true;
     bool get canUse => mounted && context!=null ;
 
+    showSnack(final SnackBar snack){
+      if(!canUse)return;
+      final ScaffoldMessengerState scaffoldMessenger = ScaffoldMessenger.of(context!);
+      scaffoldMessenger.showSnackBar(
+          snack
+      );
+    }
+
+    cancelCurrentSnackBar(){
+      if(!canUse)return;
+      final ScaffoldMessengerState scaffoldMessenger = ScaffoldMessenger.of(context!);
+      scaffoldMessenger.removeCurrentSnackBar();
+    }
  }
 
  extension MaskRootController on ScreenMaskController {
@@ -33,6 +46,7 @@ class ShararaAppController {
    static final List<ScreenMaskController> controllers = [];
    static ScreenMaskController? get lastScreenController => controllers.lastOrNull;
    static void removeLastController (){
+     if(! (controllers.length>1))return;
      controllers.removeLast();
    }
    static Future<bool> popLastContext() async {

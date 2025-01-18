@@ -3,7 +3,9 @@ import 'package:sharara_apps_building_helpers/src/Controllers/ShararaAppHelperCo
 
 class RoyalColors{
 
+  RoyalColors._();
   static  Color get  mainAppColor => ShararaAppController.instance.themeController.mainColor;
+  static  Color get  secondaryColor => ShararaAppController.instance.themeController.secondaryColor;
 
   static const Color secondFaintColor=Colors.teal;
   static const Color  greyFaintColor = Color.fromRGBO (144, 148, 156,1);
@@ -19,6 +21,7 @@ class RoyalColors{
   static const Color transparent=Colors.transparent;
   static const Color purple=Colors.purple;
   static const Color lightBlue=Colors.lightBlue;
+  static const Color indigoAccent=Colors.indigoAccent;
   static const Color blue=Colors.blue;
   static const Color indigo=Colors.indigo;
 

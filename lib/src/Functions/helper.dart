@@ -3,26 +3,34 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 import 'package:sharara_apps_building_helpers/src/Ui/ShararaAppHelper/context_and_main_scaffold_initializer.dart';
 import 'package:sharara_apps_building_helpers/ui.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class FunctionHelpers {
 
+  FunctionHelpers._();
 static Future<T?> tryFuture<T>(Future<T?> future,
     {
     final int? timeoutSeconds,
     final bool withLoading  = false,
-    final Function(dynamic er)? onError})async{
+    final Function(dynamic er)? onError,
+    final bool withoutTimeOut = false
+    })async{
     if(withLoading)await ShararaAppController.instance.shararaDialogController.startLoading();
-    final T? result =  await future.then((value) => value)
-        .timeout(Duration(seconds: timeoutSeconds ?? 90))
+    final Future<T?> futureResult =   future.then((value) => value)
         .catchError((e){
       if(onError!=null)onError(e);
       return null;
     });
+    if(!withoutTimeOut){
+      futureResult.timeout(Duration(seconds: timeoutSeconds ?? 90));
+    }
+    final T? result =  await futureResult;
     if(withLoading){
       await Future.delayed(const Duration(milliseconds:30));
       await ShararaAppController.instance.shararaDialogController.cancelCurrentDialog();
@@ -48,6 +56,8 @@ static Future<T?> tryFutureCallBack<T>(Future<T?> Function() callback,
   return "${buffer.toString()}${DateTime.now().toIso8601String().replaceAll("-","_")}";
 }
 
+  static successToast([final String message = "تمت العملية بنجاح"])=>
+  toast(message,status:true);
   static toast(final String message, {final Color? color, final bool? status}) {
     Fluttertoast.showToast(
         msg: message,
@@ -152,6 +162,30 @@ static T? tryCatch<T>(Function() callback, {final Function(dynamic)? onError}){
     if(phone==null) return;
     await launchUrl("tel:$phone");
   }
+
+
+
+  static copyString(final String data){
+    Clipboard.setData(ClipboardData(text:data));
+    successToast('تم النسخ بنجاح');
+
+  }
+
+  static shareString(final String text,{
+    required final BuildContext context
+  }){
+    if(Platform.isIOS && !context.mounted){
+      return;
+    }
+    final Size size = MediaQuery.of(context).size;
+    final double top = size.height/3;
+    Share.share(text,sharePositionOrigin:
+    ( !Platform.isIOS ?  null:
+    Rect.fromLTRB(0,top, size.width, size.height)
+    )
+    );
+  }
+
 
   static checkInputs(final List<TextEditingController> values,{final String message="جميع الحقول مطلوبة"}){
     for (final TextEditingController input in values){

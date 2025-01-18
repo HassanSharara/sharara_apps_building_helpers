@@ -8,8 +8,6 @@ main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await ShararaAppHelperInitializer.initialize();
-
-
   runApp(
       ShararaAppHelper(
       builder:(BuildContext context)=>const FirstScreen())
@@ -87,6 +85,18 @@ class Test extends StatelessWidget {
               RoyalPhoneTextFormField(title: "hi", controller: PhoneTextEditController()),
 
               const SizedBox(height:20,),
+
+              RoyalRoundedButton(
+                title:"phone",
+                onPressed:(){
+                  FunctionHelpers
+                  .jumpTo(context,
+                   FbPhoneAuthScreen(
+                       phoneNumber: "+9647807832184",
+                       onVerificationSucceed:(_){})
+                  );
+                },
+              )
 
 
             ],

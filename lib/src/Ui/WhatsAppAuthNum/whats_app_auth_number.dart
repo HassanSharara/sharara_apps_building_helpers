@@ -10,6 +10,7 @@ class WhatsAppAuthenticator extends StatefulWidget {
    required this.onSuccess,
     this.onFail,
     this.topperBuilder,
+    this.onHttpResponse,
     this.buttonColor = RoyalColors.green,
     this.textInput = TextInputType.phone,
     this.title = "التحقق",
@@ -27,6 +28,7 @@ class WhatsAppAuthenticator extends StatefulWidget {
   final Color buttonColor;
   final Function() onSuccess;
   final Function()? onFail;
+  final Function(dynamic)? onHttpResponse;
   final List<Widget> Function(BuildContext)? topperBuilder;
   @override
   State<WhatsAppAuthenticator> createState() => _WhatsAppAuthenticatorState();
@@ -124,12 +126,9 @@ class _WhatsAppAuthenticatorState extends State<WhatsAppAuthenticator> {
           author: widget.appAuthor,
           code: nOtp,
           toPhoneNumber:widget.toPhoneNumber,
-          onHttpResponse: (re){
-            print("rrr ${re.body}");
-          }
+          onHttpResponse:widget.onHttpResponse,
       );
     },withLoading:true);
-    print("eee $sent");
     if(sent==false){
       _changeCounter(0);
       return;

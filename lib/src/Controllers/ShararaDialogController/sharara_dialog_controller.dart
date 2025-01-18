@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 import 'package:sharara_apps_building_helpers/ui.dart';
-typedef QB = (Completer,WidgetBuilder);
+typedef QB = ((Completer,WidgetBuilder),Function(ScreenMaskController)?);
 class ShararaDialogController {
   ShararaDialogController._();
   static final ShararaDialogController instance = ShararaDialogController._();
@@ -21,11 +21,11 @@ class ShararaDialogController {
     final bool pushAsFirst = false
   })async{
     if(_holder!=null){
-      await _holder!.$1.future;
+      await _holder!.$1.$1.future;
       _holder = null;
     }
     final Completer completer = Completer();
-    final item = (completer,(context) => _dialogWrapper(
+    final item = ((completer,(context) => _dialogWrapper(
         child,
         canPop:canPop,
         onPopInvoked:(_)async{
@@ -36,7 +36,7 @@ class ShararaDialogController {
           if(activeDialogsCount>0)activeDialogsCount--;
           if(!completer.isCompleted)completer.complete();
         })
-    );
+    ),null);
     if(pushAsFirst){
       dialogsQueue.insert(0,item);
     }else{
@@ -79,7 +79,7 @@ class ShararaDialogController {
   Future<void> startLoading(
   {
     final Future Function()? onLoadingFutureCallback,
-    final bool canPop = true})async=>
+    final bool canPop = true}) async =>
       await forceShowingDialog(
       const ShararaLoadingDialog(
         logo:Icon(
@@ -159,13 +159,13 @@ class ShararaDialogController {
 
   Future<ScreenMaskController?>  get getLastActiveScreenController async{
   final ScreenMaskController? lastController =
-      MaskRootController.lastScreenController ;
+  MaskRootController.lastScreenController ;
   if( lastController==null || !lastController.canUse )return null;
   return lastController;
 }
 
  Future<BuildContext?> get getContextByQueue async {
-   if(_holder!=null)await _holder!.$1.future;
+   if(_holder!=null)await _holder!.$1.$1.future;
    final ScreenMaskController? lastController = await getLastActiveScreenController;
     if(lastController==null || !lastController.canUse) return null;
     await Future.delayed(const Duration(milliseconds:250));
@@ -177,14 +177,19 @@ class ShararaDialogController {
     final ScreenMaskController? lastController =
     await getLastActiveScreenController;
     if(lastController == null  || dialogsQueue.isEmpty)return;
+    if (!lastController.canUse){
+      await Future.delayed(const Duration(milliseconds:400));
+      return _contextUsingWorker();
+    }
      activeDialogsCount++;
      final QB qb = dialogsQueue.removeAt(0);
      _holder = qb;
+
     showDialog(
         context:lastController.context!,
-        builder: qb.$2);
+        builder: qb.$1.$2);
     final int hashCode = qb.hashCode;
-    qb.$1.future.then((_){
+    qb.$1.$1.future.then((_){
       if(_holder?.hashCode != hashCode)return;
       _holder = null;
     });

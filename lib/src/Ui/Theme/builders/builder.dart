@@ -13,11 +13,12 @@ class ShararaThemeManager extends StatelessWidget {
     return ValueListenableBuilder(
         valueListenable:ShararaThemeController.instance.themeNotifier,
         builder:(BuildContext context,ShararaTheme? theme,_){
+          final t = theme?.themeData??
+              ShararaThemeController.instance
+                  .defaultTheme.themeData;
           return MaterialApp(
             debugShowCheckedModeBanner:false,
-            theme:theme?.themeData??
-            ShararaThemeController.instance
-            .defaultTheme.themeData,
+            theme:t,
             home:ShararaDirectionBuilder(builder:builder),
           );
         });

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sharara_apps_building_helpers/src/Constants/Colors/colors.dart';
 
-class SlidePageTurner extends StatefulWidget {
+class SlidePageSwitcher extends StatefulWidget {
   final Widget primaryScreen, secondaryScreen;
   final String? goToSecondScreenLabel,goToFirstScreenLabel;
-  const SlidePageTurner(
+  const SlidePageSwitcher(
       {super.key, required this.primaryScreen, required this.secondaryScreen,
         this.goToSecondScreenLabel,this.goToFirstScreenLabel});
   @override
   RoyalPageSwitcherState createState() => RoyalPageSwitcherState();
 }
 
-class RoyalPageSwitcherState extends State<SlidePageTurner> {
+class RoyalPageSwitcherState extends State<SlidePageSwitcher> {
   /// Offsets
   Offset clipOffset = const Offset(0, 0);
   late Offset indicatorOffset ;

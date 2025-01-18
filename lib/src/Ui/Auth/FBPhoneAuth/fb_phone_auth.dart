@@ -33,13 +33,14 @@ class _FbPhoneAuthScreenState extends State<FbPhoneAuthScreen> {
   String? verificationId;
   bool codeSent = false;
 
+  bool wait = false;
   @override
   void initState() {
     super.initState();
     otpController.addListener(_otpCounterListener);
     WidgetsBinding.instance.addPostFrameCallback((_)async{
       _otpCounterListener();
-      await Future.delayed(const Duration(milliseconds:150));
+      await Future.delayed(const Duration(milliseconds:250));
       _authenticatedByPhoneNumber();
     });
   }
@@ -110,6 +111,15 @@ class _FbPhoneAuthScreenState extends State<FbPhoneAuthScreen> {
                 ),
                 const SizedBox(height:15,),
 
+                if(wait)
+                  const Align(
+                     child: SizedBox(
+                      height:10,
+                      width:20,
+                      child:LinearProgressIndicator(),
+                                       ),
+                   )
+                  else
                 ValueListenableBuilder(
                   valueListenable:otpController,
                   builder:(BuildContext context,final tv,_){
@@ -140,14 +150,22 @@ Future<void>_verify()async{
   _credentialToUse()async{
     if(credential==null)return;
     _userCredential = await FunctionHelpers.tryFuture(auth.signInWithCredential(credential!));
-    print("callllllllled ${_userCredential}");
     setState(() {});
   }
+
+  _loading([final bool value = true]){
+    if(wait==value)return;
+    setState(() {
+      wait = value;
+    });
+  }
   _authenticatedByPhoneNumber()async{
-    auth.verifyPhoneNumber(
+    _loading();
+    await auth.verifyPhoneNumber(
        phoneNumber:widget.phoneNumber,
        verificationCompleted:(final credential)async{
          this.credential = credential;
+         _loading(false);
          await _credentialToUse();
         },
         verificationFailed:widget.onVerificationFail??(_){
@@ -160,10 +178,12 @@ Future<void>_verify()async{
                  this.verificationId = verificationId;
                  codeSent = true;
                  counter.value = 30;
+                 wait = false ;
                });
          });
         },
         codeAutoRetrievalTimeout:(final verificationId){
+          _loading(false);
         });
   }
 }
