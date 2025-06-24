@@ -74,10 +74,17 @@ class ShararaThemeController {
 
    setNewFont(final String f){
      fontFamily = f;
-     themes.forEach((e,v){
-       v.fontFamily = fontFamily;
-       v = ShararaTheme.from(v);
+     final List<ShararaTheme> themes  = [];
+     this.themes.forEach( (key,value){
+       value.fontFamily = fontFamily;
+       themes.add(ShararaTheme.from(value));
      });
+     setupNewThemes(themes: themes);
+     final theme = themeNotifier.value ;
+     if ( theme == null )return;
+     theme.fontFamily = f;
+     themeNotifier.value = ShararaTheme.from(theme)
+     ;
    }
   static final ShararaThemeController instance = ShararaThemeController._();
   static Color get primaryColor => instance.mainColor;
@@ -86,8 +93,8 @@ class ShararaThemeController {
 
   initializeNewThemes({required final List<ShararaTheme> themes}){
     for ( ShararaTheme theme in themes){
-      theme = ShararaTheme.from(theme);
-      this.themes[theme.themeId] = theme;
+      theme.fontFamily = fontFamily;
+      this.themes[theme.themeId] = ShararaTheme.from(theme);
     }
   }
   setupNewThemes({required final List<ShararaTheme> themes}){
@@ -203,6 +210,7 @@ class ShararaTheme {
   final Color mainColor,secondaryColor;
   final Brightness brightness;
   String? fontFamily;
+  int changes = 0;
   ShararaTheme({required this.themeName,
     final String? themeId,
     this.mainColor = Colors.blue,
@@ -230,14 +238,18 @@ class ShararaTheme {
       brightness:theme.brightness,
       fontFamily:theme.fontFamily,
     );
+    ne.changes = theme.changes + 1 ;
     return ne;
   }
   @override
-  bool operator==(final Object other)=> other is ShararaTheme &&
+  bool operator==(final Object other){
+    return other is ShararaTheme &&
         other.themeId == themeId
-       && other.themeData.colorScheme.brightness
-       == themeData.colorScheme.brightness;
-
+        && other.themeData.colorScheme.brightness
+            == themeData.colorScheme.brightness
+        && other.fontFamily == fontFamily
+    && other.changes == changes;
+  }
   @override
   int get hashCode => super.hashCode + 10;
 

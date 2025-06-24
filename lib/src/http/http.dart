@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:sharara_apps_building_helpers/src/Functions/helper.dart';
 export 'package:dio/dio.dart' show Options,Dio,Response,CancelToken,ProgressCallback,FormData,MultipartFile;
-
+import 'package:flutter/foundation.dart';
 class ShararaHttp {
    static Map<String,dynamic> _defaultHeaders =  {};
    static Future<Map<String,dynamic>> Function(Map<String,dynamic>)? queryMapFilter;
@@ -10,7 +10,9 @@ class ShararaHttp {
    static Map<String,dynamic> get defaultHeaders {
      if(onGetHeadersInvoked!=null){
        final Map<String,dynamic>? headers = onGetHeadersInvoked!(_defaultHeaders);
-       if(headers!=null)return headers;
+       if(headers!=null){
+         return headers;
+       }
      }
      return _defaultHeaders;
    }
@@ -22,7 +24,7 @@ class ShararaHttp {
 
    ShararaHttp({this.onResponseReady});
    Future<T?> get<T>({required final String url,
-    final Map<String,String>? headers,
+     Map<String,dynamic>? headers,
     final Options? options,
     Object? data,
     final Function(int,int)? onReceiveProgress,
@@ -33,9 +35,10 @@ class ShararaHttp {
     final bool withLoading = false,
   })async {
     final Dio dio = Dio();
+    headers??=defaultHeaders;
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.get(url,
         options: options ?? Options(
-          headers:headers??defaultHeaders
+          headers:headers
         ),
         data:data,
         queryParameters:queryParameters,
@@ -53,7 +56,7 @@ class ShararaHttp {
 
 
    Future<T?> post<T>({required final String url,
-    final Map<String,String>? headers,
+     Map<String,dynamic>? headers,
     final Options? options,
     Object? data,
     final Function(int,int)? onReceiveProgress,
@@ -70,8 +73,15 @@ class ShararaHttp {
     if( data != null && dataMapFilter!=null){
       data = await dataMapFilter!(data!);
     }
+
+    headers??=defaultHeaders;
+
+    if(kDebugMode){
+      print(""
+          "\n sending request to $url with headers $headers");
+    }
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.post(url,
-      options: options ?? Options(headers:headers??defaultHeaders),
+      options: options ?? Options(headers:headers),
       queryParameters:queryParameters,
       cancelToken:cancelToken,
       data:data,
@@ -82,8 +92,17 @@ class ShararaHttp {
     );
 
     if(response!=null ){
-      if(responseBuilder!=null)responseBuilder(response);
-      if( onResponseReady!=null && response is! T) return onResponseReady!(response);
+     if(kDebugMode) {
+       print("$url \n response status is ${response.statusCode} ${response
+           .statusMessage}");
+       print("data is ${response.data}");
+     }
+         if(responseBuilder!=null)responseBuilder(response);
+         if( onResponseReady!=null && response is! T) return onResponseReady!(response);
+    } else {
+      if(kDebugMode){
+        print("response is null from url ${url}");
+      }
     }
     return response as T?;
   }

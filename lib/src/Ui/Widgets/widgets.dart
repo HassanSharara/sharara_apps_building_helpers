@@ -200,6 +200,8 @@ class RoyalRoundedButton extends StatelessWidget {
         this.linearGradientColors,
         this.gradient,
         this.textStyle,
+        this.height,
+        this.width,
         this.borderRadius,
         this.boxShadowColorOpacity = 0.3,
         this.boxShadowBlurRadius = 9.0,
@@ -217,6 +219,7 @@ class RoyalRoundedButton extends StatelessWidget {
   final BorderRadius? borderRadius;
   final EdgeInsets padding;
   final Gradient? gradient;
+  final double? height,width;
   @override
   Widget build(BuildContext context) {
     final Color color = this.color ?? RoyalColors.mainAppColor;
@@ -252,7 +255,8 @@ class RoyalRoundedButton extends StatelessWidget {
           child: Container(
             padding:padding,
             margin:const EdgeInsets.symmetric(horizontal:4.0),
-
+            height:height,
+            width:width,
             decoration:BoxDecoration(
                 borderRadius:borderRadius??BorderRadius.circular(15),
                 gradient: onPressed!=null ?
@@ -426,9 +430,13 @@ class _SnakeLikeBackgroundProfileHeadersState extends State<SnakeLikeBackgroundP
                   onTap:widget.onEditProfileTap,
                   child: Stack(
                     children: [
-                      RoyalShadowContainer(
-                        shape:BoxShape.circle,
-                        child:widget.profileImageWidget,
+                      Wrap(
+                        children: [
+                          RoyalShadowContainer(
+                            shape:BoxShape.circle,
+                            child:widget.profileImageWidget,
+                          )
+                        ],
                       ),
                       Positioned(
                         bottom:0,

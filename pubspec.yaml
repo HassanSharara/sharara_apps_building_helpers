@@ -2,7 +2,7 @@ name: sharara_apps_building_helpers
 description: "A new sharara package to make developing more easy and efficient."
 homepage: https://github.com/HassanSharara
 repository: https://github.com/HassanSharara/sharara_apps_building_helpers/tree/master
-version: 1.2.1
+version: 2.0.1
 
 
 environment:
@@ -10,7 +10,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  dio: ^5.4.3+1
+  dio: ^5.8.0+1
   flutter:
     sdk: flutter
   fluttertoast: ^8.2.5
