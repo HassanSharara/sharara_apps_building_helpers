@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 
@@ -33,11 +33,17 @@ abstract class BasicCache {
 
   String hashData(final dynamic data){
     if(settings.secret.isEmpty)return data;
-    final String baseHashedData = FunctionHelpers.tryCatch(() =>
+    final String? baseHashedData = FunctionHelpers.tryCatch(() =>
     "${base64.encode(
         utf8.encode(json.encode(data))
     )}${settings.secret}$_randomEndValue"
     );
+    if(baseHashedData == null){
+      if(kDebugMode){
+        print("invalid input data");
+      }
+      return "";
+    }
     return baseHashedData;
   }
 }

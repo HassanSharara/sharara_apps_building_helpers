@@ -10,7 +10,6 @@ import 'package:sharara_apps_building_helpers/src/Ui/ShararaAppHelper/context_an
 import 'package:sharara_apps_building_helpers/ui.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
-
 class FunctionHelpers {
 
   FunctionHelpers._();

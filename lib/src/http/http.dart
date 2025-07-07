@@ -37,9 +37,9 @@ class ShararaHttp {
     final Dio dio = Dio();
     headers??=defaultHeaders;
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.get(url,
-        options: options ?? Options(
-          headers:headers
-        ),
+      options: (options?..headers = headers) ?? Options(headers:headers,
+          validateStatus:(status)=>true
+      ),
         data:data,
         queryParameters:queryParameters,
         cancelToken:cancelToken,
@@ -81,11 +81,14 @@ class ShararaHttp {
           "\n sending request to $url with headers $headers");
     }
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.post(url,
-      options: options ?? Options(headers:headers),
+      options: (options?..headers = headers) ?? Options(headers:headers,
+      validateStatus:(status)=>true
+      ),
       queryParameters:queryParameters,
       cancelToken:cancelToken,
       data:data,
       onReceiveProgress:onReceiveProgress,
+
     ),
         withLoading:withLoading,
         onError:onError
