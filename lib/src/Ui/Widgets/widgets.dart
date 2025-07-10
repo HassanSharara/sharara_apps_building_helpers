@@ -99,22 +99,24 @@ class _RoyalTextFormFieldState extends State<RoyalTextFormField> {
   @override
   Widget build(BuildContext context) {
     final bool isPhoneController = widget.controller is PhoneTextEditController;
-    final Widget? suffix = isPhoneController ?
-    PhoneCodePicker(controller: widget.controller as PhoneTextEditController)
-        :
-    (widget.isPassword == true
-        ? IconButton(
-      icon: const Icon(
-        Icons.remove_red_eye,
-        color:Colors.blueGrey,
-      ),
-      onPressed: () {
-        setState(() {
-          password = !password;
-        });
-      },
-    )
-        : null
+    final Widget? suffix = widget.suffixIcon ?? (
+        isPhoneController ?
+        PhoneCodePicker(controller: widget.controller as PhoneTextEditController)
+            :
+        (widget.isPassword == true
+            ? IconButton(
+          icon: const Icon(
+            Icons.remove_red_eye,
+            color:Colors.blueGrey,
+          ),
+          onPressed: () {
+            setState(() {
+              password = !password;
+            });
+          },
+        )
+            : null
+        )
     );
 
     return Container(
