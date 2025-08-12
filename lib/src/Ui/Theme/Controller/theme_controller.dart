@@ -83,6 +83,7 @@ class ShararaThemeController {
      final theme = themeNotifier.value ;
      if ( theme == null )return;
      theme.fontFamily = f;
+     theme.brightness = ShararaThemeController._brightness;
      themeNotifier.value = ShararaTheme.from(theme)
      ;
    }
@@ -121,7 +122,7 @@ extension Worker on ShararaThemeController {
         themeName:theme.themeName,
         mainColor:theme.mainColor,
         secondaryColor:theme.secondaryColor,
-        brightness:theme.brightness
+        brightness:ShararaThemeController._brightness
       )
     ]);
     final t = themes[cacheManager.get().toString()];
@@ -163,6 +164,7 @@ extension Worker on ShararaThemeController {
   }
 
   changeTheme(ShararaTheme theme,{final Function()? onThemeUpdated}){
+    theme.brightness = ShararaThemeController._brightness;
     if(themeNotifier.value == theme)return;
     themeNotifier.value = theme;
     if(onThemeUpdated!=null)onThemeUpdated();
@@ -173,6 +175,7 @@ extension Worker on ShararaThemeController {
   _themeListener()async{
     final ShararaTheme? theme = themeNotifier.value;
     if(theme==null)return ;
+    theme.brightness = ShararaThemeController._brightness;
     if( theme.themeId == "default")  {
       final ShararaTheme? ct = themes[cacheManager.get().toString()];
       if(ct==null)return;
@@ -180,9 +183,10 @@ extension Worker on ShararaThemeController {
     await _saveTheme(theme);
   }
   ShararaTheme get getCachedTheme  {
-    final ShararaTheme? theme = themes[cacheManager.get().toString()];
+    final res = (){final ShararaTheme? theme = themes[cacheManager.get().toString()];
     if(theme!=null)return theme;
-    return defaultTheme;
+    return defaultTheme;}();
+    return res..brightness = ShararaThemeController._brightness;
   }
   Future<void> _saveTheme(final ShararaTheme theme)async{
     await cacheManager.insert(theme.themeId);
@@ -208,7 +212,7 @@ class ShararaTheme {
   ThemeData themeData;
   final String themeName,themeId;
   final Color mainColor,secondaryColor;
-  final Brightness brightness;
+  Brightness brightness;
   String? fontFamily;
   int changes = 0;
   ShararaTheme({required this.themeName,
