@@ -9,8 +9,9 @@ class LazyCache extends BasicCache{
         box = Hive.lazyBox(boxName);
 
   /// retrieve data from cached box
-  Future<dynamic> get({dynamic defaultValue})async{
-    return exportData(await box.get(boxKey,defaultValue:defaultValue));
+  Future<dynamic> get({final String? key,dynamic defaultValue})async{
+    final data = await box.get(key ?? boxKey,defaultValue:defaultValue);
+    return exportData(data);
   }
 
   /// use this method to save or cache the wanted data
