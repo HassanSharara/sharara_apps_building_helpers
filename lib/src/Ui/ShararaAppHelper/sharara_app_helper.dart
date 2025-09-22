@@ -7,10 +7,12 @@ import 'package:sharara_apps_building_helpers/ui.dart';
 
 class ShararaAppHelper extends StatelessWidget {
   const ShararaAppHelper({super.key,
-    required this.builder});
+    required this.builder,
+  });
   final Widget Function(BuildContext) builder;
   @override
   Widget build(BuildContext context) =>  Launcher(builder: builder,);
+
 }
 
 
@@ -21,11 +23,20 @@ class Launcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShararaThemeManager(
-        builder:(BuildContext context)=>
-         ContextAndMainScaffoldInitializer(
+        builder:(BuildContext context){
+          final child  = ContextAndMainScaffoldInitializer(
+            rootKey:firstController.scaffoldKey,
+            builder:builder,
+          );
+
+          if(OuterScreenMaskController.forUsing){
+            return ContextAndMainScaffoldInitializer(
               rootKey:firstController.scaffoldKey,
-              builder:builder,
-            )
+              builder:(_)=>OuterScreenMaskUi(builder: builder),
+            );
+          }
+          return child;
+        }
     );
   }
   ScreenMaskController get firstController {

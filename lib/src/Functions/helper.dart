@@ -68,12 +68,18 @@ static Future<T?> tryFutureCallBack<T>(Future<T?> Function() callback,
 
   static jumpTo(final BuildContext context,final Widget child){
   ScreenMaskController.buildNew();
+
   Navigator.push(
    context,
    ShararaAnimatedNavigator(
      ShararaDirectionBuilder(
        builder:(_)=>ContextAndMainScaffoldInitializer(
-         builder:(_)=>child,
+         builder:(_){
+           if(OuterScreenMaskController.forUsing){
+             return OuterScreenMaskUi(builder: (_)=>child);
+           }
+           return child;
+         },
        ),
      ),
    )

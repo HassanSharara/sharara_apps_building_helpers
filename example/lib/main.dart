@@ -7,7 +7,9 @@ import 'package:sharara_apps_building_helpers/ui.dart';
 main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await ShararaAppHelperInitializer.initialize();
+  await ShararaAppHelperInitializer.initialize(
+    withOuter:true
+  );
   runApp(
       ShararaAppHelper(
       builder:(BuildContext context)=>const FirstScreen())
@@ -25,6 +27,15 @@ class FirstScreen extends StatelessWidget {
 }
 class Test extends StatelessWidget {
   const Test({super.key});
+
+
+  Future<CompletingResults?> r()async{
+    await Future.delayed(const Duration(seconds:3));
+    return const CompletingResults(
+      success:false,
+      label:"Everything is Done"
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +88,35 @@ class Test extends StatelessWidget {
                   FunctionHelpers.toast("success",status:true);
                 },
                 child:const Text("settings"),
+              ),
+
+
+              ElevatedButton(
+                onPressed:()async{
+                    FunctionHelpers.jumpTo(context,
+                      Scaffold(
+                        appBar:AppBar(
+                          title:const Text("outer screen "),
+                        ),
+                        body: Column(
+                          mainAxisAlignment:MainAxisAlignment.center,
+                          crossAxisAlignment:CrossAxisAlignment.center,
+                          children: [
+                            RoyalRoundedButton(
+                              title:"check",
+                              onPressed:(){
+                                OuterScreenMaskController.instance
+                                    .launch(TaskProgressHolder(title: "جاري رفع البيانات", future:
+                                          r()
+                                ));
+                                },
+                            )
+                          ],
+                        ),
+                      )
+                    );
+                  },
+                child:const Text("check outer mask"),
               ),
 
 
