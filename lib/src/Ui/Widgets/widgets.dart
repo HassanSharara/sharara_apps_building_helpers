@@ -70,12 +70,16 @@ class RoyalTextFormField extends StatefulWidget {
         this.hintText ,
         this.maxLines = 1,
         this.isPassword = false,
+        this.enable ,
+        this.readOnly = false,
         this.contextMenuBuilder,
       });
   final String? title,hintText;
   final TextEditingController controller;
   final TextInputType? inputType;
   final bool isPassword;
+  final bool readOnly;
+  final bool? enable;
   final int? maxLines,maxLength;
   final double? height, width;
   final double radius;
@@ -125,6 +129,8 @@ class _RoyalTextFormFieldState extends State<RoyalTextFormField> {
       margin: const EdgeInsets.symmetric(vertical: 2.0),
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: TextFormField(
+        enabled:widget.enable,
+        readOnly:widget.readOnly,
         maxLength: widget.maxLength,
         maxLines: widget.maxLines,
         controller: widget.controller,
@@ -378,9 +384,12 @@ class SnakeLikeBackgroundProfileHeaders extends StatefulWidget {
   const SnakeLikeBackgroundProfileHeaders({super.key,
     required this.profileImageWidget,
     this.onEditProfileTap,
+    this.height,
+    this.width,
   });
   final Widget profileImageWidget;
   final GestureTapCallback? onEditProfileTap;
+  final double? height,width;
   @override
   State<SnakeLikeBackgroundProfileHeaders> createState() => _SnakeLikeBackgroundProfileHeadersState();
 }
@@ -430,28 +439,34 @@ class _SnakeLikeBackgroundProfileHeadersState extends State<SnakeLikeBackgroundP
                 alignment:const Alignment(0,0.5),
                 child:GestureDetector(
                   onTap:widget.onEditProfileTap,
-                  child: Stack(
-                    children: [
-                      Wrap(
-                        children: [
-                          RoyalShadowContainer(
-                            shape:BoxShape.circle,
-                            child:widget.profileImageWidget,
-                          )
-                        ],
-                      ),
-                      Positioned(
-                        bottom:0,
-                        right:3,
-                        child:RoyalShadowContainer(
-                          shape:BoxShape.circle,
-                          padding:4,
-                          child: Icon(Icons.edit,
-                            size: 14,
-                            color:RoyalColors.secondaryColor,),
+                  child: SizedBox(
+                    height: widget.height,
+                    width: widget.width,
+                    child: Stack(
+                      clipBehavior:Clip.none,
+                      alignment:Alignment.center,
+                      children: [
+                        Wrap(
+                          children: [
+                            RoyalShadowContainer(
+                              shape:BoxShape.circle,
+                              child:widget.profileImageWidget,
+                            )
+                          ],
                         ),
-                      )
-                    ],
+                        Positioned(
+                          bottom:0,
+                          right:3,
+                          child:RoyalShadowContainer(
+                            shape:BoxShape.circle,
+                            padding:4,
+                            child: Icon(Icons.edit,
+                              size: 14,
+                              color:RoyalColors.secondaryColor,),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -539,6 +554,7 @@ class RoyalShadowContainer extends StatelessWidget {
         this.opacity = 0.2,
         this.shadowColor,
         this.backgroundColor,
+        this.foregroundDecoration,
         this.boxShadow,
         this.shape = BoxShape.rectangle,
         this.clipBehavior = Clip.none,
@@ -552,10 +568,12 @@ class RoyalShadowContainer extends StatelessWidget {
   final Clip clipBehavior;
   final BoxShape shape;
   final List<BoxShadow>? boxShadow;
+  final Decoration? foregroundDecoration;
   @override
   Widget build(BuildContext context) {
     return Container(
         height: height,
+        foregroundDecoration:foregroundDecoration,
         width: width,
         margin: margin,
         padding: insidePadding ?? EdgeInsets.all(padding ?? 8.0),

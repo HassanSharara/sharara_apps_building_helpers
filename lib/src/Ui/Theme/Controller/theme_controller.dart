@@ -15,7 +15,10 @@ class ShararaThemeController {
     cacheManager = DefaultUiCacheManager(boxName:ConstantsBoxesNames.defaultThemeUiCacheManager);
     init();
   }
+
   static Brightness _brightness = Brightness.light;
+
+
   Brightness get brightness => _brightness;
    switchBrightness()async{
     final Brightness brightness = _brightness ==
@@ -72,6 +75,10 @@ class ShararaThemeController {
 
   ];
 
+   setBrightness(Brightness br){
+     if (gotCachedBrightness)return;
+     _brightness = br;
+   }
    setNewFont(final String f){
      fontFamily = f;
      final List<ShararaTheme> themes  = [];
@@ -84,9 +91,10 @@ class ShararaThemeController {
      if ( theme == null )return;
      theme.fontFamily = f;
      theme.brightness = ShararaThemeController._brightness;
-     themeNotifier.value = ShararaTheme.from(theme)
-     ;
+     themeNotifier.value = ShararaTheme.from(theme);
    }
+  bool gotCachedBrightness = false;
+
   static final ShararaThemeController instance = ShararaThemeController._();
   static Color get primaryColor => instance.mainColor;
   Color get mainColor => (instance.themeNotifier.value??getCachedTheme).mainColor;
@@ -145,13 +153,13 @@ extension Worker on ShararaThemeController {
     changeTheme(getCachedTheme);
     _setupNotifiers();
   }
-
   _changeBrightnessFromCache(){
     final dynamic b = cacheManager.get(key:"brightness");
     Brightness? bb;
     for(final br in Brightness.values){
       if(br.name == b.toString()){
         bb = br;
+        gotCachedBrightness = true;
       }
     }
     if(bb!=null){

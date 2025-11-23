@@ -36,6 +36,7 @@ class ShararaHttp {
   })async {
     final Dio dio = Dio();
     headers??=defaultHeaders;
+    if(onGetHeadersInvoked!=null)headers = onGetHeadersInvoked!(headers);
     final Response? response = await FunctionHelpers.tryFuture<Response>(dio.get(url,
       options: (options?..headers = headers) ?? Options(headers:headers,
           validateStatus:(status)=>true
@@ -75,7 +76,7 @@ class ShararaHttp {
     }
 
     headers??=defaultHeaders;
-
+    if(onGetHeadersInvoked!=null)headers = onGetHeadersInvoked!(headers);
     if(kDebugMode){
       print(""
           "\n sending request to $url with headers $headers");
