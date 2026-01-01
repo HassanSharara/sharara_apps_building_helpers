@@ -15,21 +15,32 @@ class ContextAndMainScaffoldInitializer extends StatefulWidget {
 }
 
 class _ContextAndMainScaffoldInitializerState extends State<ContextAndMainScaffoldInitializer> {
+
+  GlobalKey<ScaffoldState>? _key;
+
+  GlobalKey<ScaffoldState> get key {
+    _key ??= MaskRootController.lastScreenController?.scaffoldKey;
+    return _key!;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   void dispose() {
     super.dispose();
-    Future.delayed(const Duration(milliseconds:40))
+    Future.delayed(
+        const Duration(milliseconds:40))
     .then((_){
       MaskRootController.removeLastController();
     });
   }
   @override
   Widget build(BuildContext context) {
-
     return PopScope(
       child:Scaffold(
-        key:widget.rootKey
-            ?? MaskRootController.lastScreenController?.scaffoldKey,
+        key:key,
         body:Builder(key:UniqueKey(),builder:widget.builder,),
       ),
     );

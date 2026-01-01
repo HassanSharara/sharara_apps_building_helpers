@@ -168,8 +168,8 @@ Future<void>_verify()async{
          _loading(false);
          await _credentialToUse();
         },
-        verificationFailed:widget.onVerificationFail??(_){
-         FunctionHelpers.toast(_.message??"حصل خطأ في التحقق برقم الهاتف",status:false);
+        verificationFailed:widget.onVerificationFail??(c){
+         FunctionHelpers.toast(c.message??"حصل خطأ في التحقق برقم الهاتف",status:false);
         },
         codeSent:(final String verificationId,__){
          WidgetsBinding.instance

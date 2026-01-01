@@ -51,6 +51,7 @@ class Test extends StatelessWidget {
         child:const Icon(Icons.add),
         onPressed:(){},
       ),
+
       appBar:AppBar(
         title:const Text("app bar"),
         centerTitle:true,
@@ -88,6 +89,24 @@ class Test extends StatelessWidget {
                   FunctionHelpers.toast("success",status:true);
                 },
                 child:const Text("settings"),
+              ),
+
+              ElevatedButton(
+
+                onPressed:()async{
+                  FunctionHelpers.
+                  jumpTo(context, Scaffold(
+                    body:Center(
+                      child:ElevatedButton(onPressed:(){
+                        FunctionHelpers.jumpTo(context,
+                            Scaffold());
+                      },
+                          child: Text("check")),
+                    ),
+                  ));
+                  FunctionHelpers.toast("success",status:true);
+                },
+                child:const Text("Check"),
               ),
 
 

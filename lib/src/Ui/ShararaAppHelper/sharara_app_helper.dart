@@ -16,29 +16,44 @@ class ShararaAppHelper extends StatelessWidget {
 }
 
 
-class Launcher extends StatelessWidget {
+class Launcher extends StatefulWidget {
   const Launcher({super.key,required this.builder,
   });
   final Widget Function(BuildContext) builder;
+
+  @override
+  State<Launcher> createState() => _LauncherState();
+}
+
+class _LauncherState extends State<Launcher> {
+
+  GlobalKey<ScaffoldState>? _key;
+
+  GlobalKey<ScaffoldState> get key {
+    _key??=firstController.scaffoldKey;
+    return _key!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ShararaThemeManager(
         builder:(BuildContext context){
           final child  = ContextAndMainScaffoldInitializer(
-            rootKey:firstController.scaffoldKey,
-            builder:builder,
+            rootKey:key,
+            builder:widget.builder,
           );
 
           if(OuterScreenMaskController.forUsing){
             return ContextAndMainScaffoldInitializer(
-              rootKey:firstController.scaffoldKey,
-              builder:(_)=>OuterScreenMaskUi(builder: builder),
+              rootKey:key,
+              builder:(_)=>OuterScreenMaskUi(builder: widget.builder),
             );
           }
           return child;
         }
     );
   }
+
   ScreenMaskController get firstController {
     if(MaskRootController.controllers.isEmpty){
       return ScreenMaskController.buildNew();

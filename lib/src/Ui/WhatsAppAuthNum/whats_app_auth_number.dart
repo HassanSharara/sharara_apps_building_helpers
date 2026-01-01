@@ -110,7 +110,7 @@ class _WhatsAppAuthenticatorState extends State<WhatsAppAuthenticator> {
 
   String get generateNewOtpCode{
     final StringBuffer buffer = StringBuffer();
-    for(final int _ in List.generate(6,(_)=>_)){
+    for(final int _ in List.generate(6,(c)=>c)){
       buffer.write(Random().nextInt(10));
     }
     return buffer.toString();
