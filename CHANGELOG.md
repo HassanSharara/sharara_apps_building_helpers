@@ -1,3 +1,6 @@
+## 2.2.1
+- solve context tracking 
+- solve global key similarity
 ## 1.2.1
 
 - setting new default theme fixes
