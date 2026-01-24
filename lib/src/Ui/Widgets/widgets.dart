@@ -73,6 +73,7 @@ class RoyalTextFormField extends StatefulWidget {
         this.enable ,
         this.readOnly = false,
         this.contextMenuBuilder,
+        this.style
       });
   final String? title,hintText;
   final TextEditingController controller;
@@ -86,6 +87,7 @@ class RoyalTextFormField extends StatefulWidget {
   final Widget? suffixIcon;
   final Color? borderColor;
   final Color? focusColor;
+  final TextStyle? style;
   final EditableTextContextMenuBuilder? contextMenuBuilder;
   @override
   State<RoyalTextFormField> createState() => _RoyalTextFormFieldState();
@@ -156,7 +158,7 @@ class _RoyalTextFormFieldState extends State<RoyalTextFormField> {
             ),
         keyboardType: widget.inputType,
         obscureText: password,
-        style: const TextStyle(
+        style: widget.style ?? const TextStyle(
             color:Colors.blueGrey, fontWeight: FontWeight.w300),
         decoration: InputDecoration(
 

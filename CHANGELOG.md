@@ -1,3 +1,5 @@
+## 2.2.1
+- adding style property to RoyalTextFormField
 ## 2.2.0
 - solve context tracking 
 - solve global key similarity
