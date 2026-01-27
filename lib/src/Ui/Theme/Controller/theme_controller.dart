@@ -111,6 +111,8 @@ class ShararaThemeController {
     initializeNewThemes(themes: themes);
   }
   final ValueNotifier<ShararaTheme?> themeNotifier = ValueNotifier(null);
+  List<LocalizationsDelegate> localizationsDelegates = [];
+  List<Locale> supportedLocales = [];
 
 }
 
