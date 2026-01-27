@@ -1,3 +1,5 @@
+## 2.2.2
+- adding localization delegates to sharara theme controller
 ## 2.2.1
 - adding style property to RoyalTextFormField
 ## 2.2.0
