@@ -1,6 +1,7 @@
+## 2.2.3 
+- adding tryFuture extension on Future<T>
 ## 2.2.2
-- adding tryFuture Extension on Future<T>
-
+- adding localization delegates to sharara theme controller
 ## 2.2.1
 - adding style property to RoyalTextFormField
 ## 2.2.0
