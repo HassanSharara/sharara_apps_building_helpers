@@ -19,7 +19,14 @@ class ShararaThemeManager extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner:false,
             localizationsDelegates: ShararaThemeController.instance.localizationsDelegates,
-            supportedLocales: ShararaThemeController.instance.supportedLocales,
+            supportedLocales:
+            ShararaThemeController.instance.supportedLocales.isNotEmpty ?
+            ShararaThemeController.instance.supportedLocales:
+                [
+                  const Locale('en', 'US'),
+                  const Locale('ar', 'IQ'),
+                ]
+            ,
             theme:t,
             home:ShararaDirectionBuilder(builder:builder),
           );
