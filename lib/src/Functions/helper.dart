@@ -202,3 +202,11 @@ static T? tryCatch<T>(Function() callback, {final Function(dynamic)? onError}){
     return true;
   }
 }
+
+
+extension TryFuture<T> on Future<T> {
+
+  Future<T?> get tryFuture async {
+    return await FunctionHelpers.tryFuture(this);
+  }
+}
