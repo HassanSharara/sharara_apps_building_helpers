@@ -23,8 +23,7 @@ class ShararaThemeManager extends StatelessWidget {
             ShararaThemeController.instance.supportedLocales.isNotEmpty ?
             ShararaThemeController.instance.supportedLocales:
                 [
-                  const Locale('en', 'US'),
-                  const Locale('ar', 'IQ'),
+                  const Locale('en', 'us'),
                 ]
             ,
             theme:t,

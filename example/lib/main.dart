@@ -8,7 +8,7 @@ main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await ShararaAppHelperInitializer.initialize(
-    withOuter:true
+    withOuter:true,
   );
   runApp(
       ShararaAppHelper(
