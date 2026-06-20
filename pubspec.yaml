@@ -2,7 +2,7 @@ name: sharara_apps_building_helpers
 description: "A new sharara package to make developing more easy and efficient."
 homepage: https://github.com/HassanSharara
 repository: https://github.com/HassanSharara/sharara_apps_building_helpers/tree/master
-version: 2.2.6
+version: 2.3.8
 
 
 environment:
@@ -22,6 +22,7 @@ dependencies:
   country_picker: ^2.0.27
   url_launcher: ^6.3.2
   dio: ^5.9.0
+  freerasp: ^8.0.0
 
 
 dev_dependencies:

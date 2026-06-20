@@ -242,7 +242,6 @@ extension Worker on ShararaThemeController {
 
   changeTheme(ShararaTheme theme,{final Function()? onThemeUpdated}){
     theme.brightness = ShararaThemeController._brightness;
-    if(themeNotifier.value == theme)return;
     themeNotifier.value = theme;
     if(onThemeUpdated!=null)onThemeUpdated();
   }
@@ -307,7 +306,7 @@ class ShararaTheme {
       colorScheme:ColorScheme.fromSeed(seedColor:mainColor,
         brightness:brightness,
       )),
-  themeId = themeId ?? mainColor.value.toString();
+  themeId = themeId ?? mainColor.toARGB32().toString();
 
 
 

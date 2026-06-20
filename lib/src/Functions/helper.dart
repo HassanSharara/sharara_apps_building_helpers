@@ -66,22 +66,29 @@ static Future<T?> tryFutureCallBack<T>(Future<T?> Function() callback,
   }
 
 
-  static jumpTo(final BuildContext context,final Widget child){
-  ScreenMaskController.buildNew();
-
-  Navigator.push(
-   context,
-   ShararaAnimatedNavigator(
-     ShararaDirectionBuilder(
-       builder:(_)=>ContextAndMainScaffoldInitializer(
-         builder:(_){
-           if(OuterScreenMaskController.forUsing){
-             return OuterScreenMaskUi(builder: (_)=>child);
-           }
-           return child;
-         },
-       ),
-     ),
+  static jumpTo(final BuildContext context,final dynamic child,
+  {final Curve curve = Curves.easeInToLinear,
+  final Duration duration = const Duration(milliseconds:300)
+  }
+      ){
+    assert(child is Widget || child is PageRouteBuilder);
+    ScreenMaskController.buildNew();
+   Widget builder  ()=>      ShararaDirectionBuilder(
+    builder:(_)=>ContextAndMainScaffoldInitializer(
+      builder:(_){
+        if(OuterScreenMaskController.enabled && OuterScreenMaskController.forUsing){
+          return OuterScreenMaskUi(builder: (_)=>child);
+        }
+        return child;
+      },
+    ),
+  );
+  Navigator.push( context,
+      child is PageRouteBuilder ? child:
+      ShararaAnimatedNavigator(
+      builder(),
+     curve:curve,
+     transitionDuration:duration
    )
   );
   }
@@ -135,7 +142,8 @@ static T? tryCatch<T>(Function() callback, {final Function(dynamic)? onError}){
   }
   return null;
 }
-  static bool isEmail(final String email,{final String message="يجب ان يكون البريد الالكتروني صالح"}){
+
+static bool isEmail(final String email,{final String message="يجب ان يكون البريد الالكتروني صالح"}){
     final check= RegExp(
         r'''
 ^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$''')
@@ -144,16 +152,18 @@ static T? tryCatch<T>(Function() callback, {final Function(dynamic)? onError}){
     return check;
   }
 
-  static Future launchUrl(final String url,{
+static Future launchUrl(final String url,{
     final url_launcher.LaunchMode mode = url_launcher.LaunchMode.platformDefault,
   })async{
     await url_launcher.launchUrl(Uri.parse(url),mode:mode);
 }
-  static String executeIraqCode( String phone,{final String qCode = "+964"}){
+
+static String executeIraqCode( String phone,{final String qCode = "+964"}){
     if(phone.contains(qCode))return phone;
     return qCode+phone;
   }
-  static Future openWhatsAppFor({required  String phone,required final String message})async{
+
+static Future openWhatsAppFor({required  String phone,required final String message})async{
     String url;
     if (Platform.isAndroid) {
       url= "whatsapp://send?phone=$phone&text=${Uri.parse(message)}"; // new line
@@ -163,18 +173,19 @@ static T? tryCatch<T>(Function() callback, {final Function(dynamic)? onError}){
     await launchUrl(url);
   }
 
-  static Future<void>phoneCall(final String? phone)async{
+static Future<void>phoneCall(final String? phone)async{
     if(phone==null) return;
     await launchUrl("tel:$phone");
   }
 
 
 
-  static copyString(final String data){
+static copyString(final String data){
     Clipboard.setData(ClipboardData(text:data));
     successToast('تم النسخ بنجاح');
 
   }
+
 
   static shareString(final String text,{
     required final BuildContext context
@@ -184,9 +195,11 @@ static T? tryCatch<T>(Function() callback, {final Function(dynamic)? onError}){
     }
     final Size size = MediaQuery.of(context).size;
     final double top = size.height/3;
-    Share.share(text,sharePositionOrigin:
-    ( !Platform.isIOS ?  null:
-    Rect.fromLTRB(0,top, size.width, size.height)
+    SharePlus.instance.share(ShareParams(
+      title: text,
+      sharePositionOrigin: ( !Platform.isIOS ?  null:
+      Rect.fromLTRB(0,top, size.width, size.height)
+      )
     )
     );
   }
@@ -204,6 +217,21 @@ static T? tryCatch<T>(Function() callback, {final Function(dynamic)? onError}){
 }
 
 
+extension IsNumber on dynamic {
+
+  bool get isInt => FunctionHelpers.isInt(this);
+  bool get isDouble => FunctionHelpers.isDouble(this);
+}
+
+extension IsEmail on String {
+
+  bool get isEmail => FunctionHelpers.isEmail(this);
+}
+extension TryCatch<T> on T? Function() {
+
+  T? get tryCatch => FunctionHelpers.tryCatch(this);
+
+}
 extension TryFuture<T> on Future<T> {
 
   Future<T?> get tryFuture async {

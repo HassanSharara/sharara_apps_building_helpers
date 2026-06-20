@@ -7,6 +7,7 @@ import 'package:sharara_apps_building_helpers/ui.dart';
 main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  ShararaAppHelperInitializer.setDebugMode();
   await ShararaAppHelperInitializer.initialize(
     withOuter:true,
   );
@@ -74,7 +75,7 @@ class Test extends StatelessWidget {
 
                       Container(
                         padding:const EdgeInsets.all(10),
-                        child: Text("${Colors.green.value}"),
+                        child: Text("${Colors.green.toARGB32()}"),
                       ),
                     ],
                   ),
@@ -84,8 +85,10 @@ class Test extends StatelessWidget {
 
               ElevatedButton(
                 onPressed:()async{
+                  const child =  ShararaThemePicker();
+
                   FunctionHelpers.
-                  jumpTo(context, const ShararaThemePicker());
+                  jumpTo(context,child);
                   FunctionHelpers.toast("success",status:true);
                 },
                 child:const Text("settings"),
@@ -99,9 +102,16 @@ class Test extends StatelessWidget {
                     body:Center(
                       child:ElevatedButton(onPressed:(){
                         FunctionHelpers.jumpTo(context,
-                            Scaffold());
+                            Scaffold(
+                              body: RoyalRoundedButton(
+                                title:"exit",
+                                onPressed:(){
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ));
                       },
-                          child: Text("check")),
+                          child: const Text("check")),
                     ),
                   ));
                   FunctionHelpers.toast("success",status:true);

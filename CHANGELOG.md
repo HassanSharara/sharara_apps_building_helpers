@@ -1,3 +1,8 @@
+## 2.3.8
+- adding security logic
+- adding advance ui modifications to Ui Helper
+## 2.3.5
+- adding 6 security layers to protect your last release app
 ## 2.2.3 
 - adding tryFuture extension on Future<T>
 ## 2.2.2

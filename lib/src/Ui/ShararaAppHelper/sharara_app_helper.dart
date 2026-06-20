@@ -46,7 +46,10 @@ class _LauncherState extends State<Launcher> {
           if(OuterScreenMaskController.forUsing){
             return ContextAndMainScaffoldInitializer(
               rootKey:key,
-              builder:(_)=>OuterScreenMaskUi(builder: widget.builder),
+              builder:OuterScreenMaskController.enabled ?(_)=>
+                  OuterScreenMaskUi(builder: widget.builder):
+                widget.builder
+              ,
             );
           }
           return child;

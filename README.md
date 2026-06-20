@@ -44,17 +44,26 @@ flutter pub add hive_flutter
 - initialize your app helper by invoke ShararaAppHelperInitializer.initialize `await ShararaAppHelperInitializer.initialize();` 
 - now you can run your app calling runApp and parse ShararaAppHelper as root Widget `  runApp( ShararaAppHelper(builder:(BuildContext context)=>const FirstScreen()));`
 ```dart
-import 'dart:async';
+
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:sharara_apps_building_helpers/sharara_apps_building_helpers.dart';
 import 'package:sharara_apps_building_helpers/ui.dart';
 
 main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await ShararaAppHelperInitializer.initialize();
-  runApp( ShararaAppHelper(builder:(BuildContext context)=>const FirstScreen()));
+  ShararaAppHelperInitializer.setDebugMode();
+  await ShararaAppHelperInitializer.initialize(
+    withOuter:true,
+  );
+  runApp(
+      ShararaAppHelper(
+      builder:(BuildContext context)=>const FirstScreen())
+  );
+
+
 }
 
 class FirstScreen extends StatelessWidget {
@@ -66,6 +75,15 @@ class FirstScreen extends StatelessWidget {
 }
 class Test extends StatelessWidget {
   const Test({super.key});
+
+
+  Future<CompletingResults?> r()async{
+    await Future.delayed(const Duration(seconds:3));
+    return const CompletingResults(
+      success:false,
+      label:"Everything is Done"
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +99,7 @@ class Test extends StatelessWidget {
         child:const Icon(Icons.add),
         onPressed:(){},
       ),
+
       appBar:AppBar(
         title:const Text("app bar"),
         centerTitle:true,
@@ -89,7 +108,9 @@ class Test extends StatelessWidget {
           child:Column(
             mainAxisAlignment:MainAxisAlignment.center,
             children: [
-              Card(
+
+
+               Card(
                 child:Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -110,32 +131,80 @@ class Test extends StatelessWidget {
 
 
               ElevatedButton(
-                onPressed:(){
+                onPressed:()async{
                   FunctionHelpers.
                   jumpTo(context, const ShararaThemePicker());
                   FunctionHelpers.toast("success",status:true);
                 },
                 child:const Text("settings"),
               ),
-              const SizedBox(height:20,),
-              RoyalRoundedButton(
-                key:UniqueKey(),
+
+              ElevatedButton(
+
                 onPressed:()async{
-                  ShararaDialogController
-                      .instance
-                      .startLoading(
-                      onLoadingFutureCallback:()async{
-                        await Future.delayed(const Duration(seconds:3));
-                      }
-                  );
-                  await Future.delayed(const Duration(seconds:1));
-                  ShararaDialogController
-                      .instance.jumpUsingDialog(
-                      const ShararaThemePicker()
+                  FunctionHelpers.
+                  jumpTo(context, Scaffold(
+                    body:Center(
+                      child:ElevatedButton(onPressed:(){
+                        FunctionHelpers.jumpTo(context,
+                            Scaffold());
+                      },
+                          child: Text("check")),
+                    ),
+                  ));
+                  FunctionHelpers.toast("success",status:true);
+                },
+                child:const Text("Check"),
+              ),
+
+
+              ElevatedButton(
+                onPressed:()async{
+                    FunctionHelpers.jumpTo(context,
+                      Scaffold(
+                        appBar:AppBar(
+                          title:const Text("outer screen "),
+                        ),
+                        body: Column(
+                          mainAxisAlignment:MainAxisAlignment.center,
+                          crossAxisAlignment:CrossAxisAlignment.center,
+                          children: [
+                            RoyalRoundedButton(
+                              title:"check",
+                              onPressed:(){
+                                OuterScreenMaskController.instance
+                                    .launch(TaskProgressHolder(title: "جاري رفع البيانات", future:
+                                          r()
+                                ));
+                                },
+                            )
+                          ],
+                        ),
+                      )
+                    );
+                  },
+                child:const Text("check outer mask"),
+              ),
+
+
+              const SizedBox(height:20,),
+
+              RoyalPhoneTextFormField(title: "hi", controller: PhoneTextEditController()),
+
+              const SizedBox(height:20,),
+
+              RoyalRoundedButton(
+                title:"phone",
+                onPressed:(){
+                  FunctionHelpers
+                  .jumpTo(context,
+                   FbPhoneAuthScreen(
+                       phoneNumber: "+9647807832184",
+                       onVerificationSucceed:(_){})
                   );
                 },
-                title:"settings",
-              ),
+              )
+
 
             ],
           )
@@ -143,8 +212,6 @@ class Test extends StatelessWidget {
     );
   }
 }
-
-
 
 
 ```

@@ -12,6 +12,7 @@ final class OuterScreenMaskController {
     static  OuterScreenMaskController? _controller;
     static OuterScreenMaskController init()=> instance;
     static bool get forUsing  => _controller != null;
+    static bool enabled = true;
 
 
     static OuterScreenMaskController get instance {
